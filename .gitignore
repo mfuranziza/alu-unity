@@ -97,3 +97,10 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+unity_concepts/[Ll]ibrary/
+unity_concepts/[Tt]emp/
+unity_concepts/[Oo]bj/
+unity_concepts/[Bb]uild/
+unity_concepts/[Bb]uilds/
+unity_concepts/[Ll]ogs/
