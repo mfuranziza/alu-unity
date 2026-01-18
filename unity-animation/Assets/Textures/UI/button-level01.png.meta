@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 17aeaa6e59f52034684c0a8a0bb0389c
+guid: 81415b489a034d448862d701a97adfaf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -81,19 +81,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -120,6 +107,19 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -133,7 +133,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Server
+    buildTarget: Windows Store Apps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -149,7 +149,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: button-level01
+      name: button-level01_0
       rect:
         serializedVersion: 2
         x: 0
@@ -157,20 +157,20 @@ TextureImporter:
         width: 600
         height: 650
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 91e5331c51489ad4d98474a51e0e3752
-      internalID: -2046357816
+      spriteID: f151ee986e804ab409f4309a3b70ade1
+      internalID: 658476766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button-level02
+      name: button-level01_1
       rect:
         serializedVersion: 2
         x: 600
@@ -178,20 +178,20 @@ TextureImporter:
         width: 600
         height: 650
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8e62d9256678dd140ae2748de95922e1
-      internalID: -931107232
+      spriteID: 79402cfadfe38b14d8daa1da8f8940a1
+      internalID: -1791846833
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button-level03
+      name: button-level01_2
       rect:
         serializedVersion: 2
         x: 1200
@@ -199,14 +199,14 @@ TextureImporter:
         width: 600
         height: 650
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee7c60de3c31eab4594606d44dac77f7
-      internalID: 1275551264
+      spriteID: b2d89f956feb1bf4ba9efc4c9f9d742d
+      internalID: 1753337391
       vertices: []
       indices: 
       edges: []
@@ -222,9 +222,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      button-level01: -2046357816
-      button-level02: -931107232
-      button-level03: 1275551264
+      button-level01_0: 658476766
+      button-level01_1: -1791846833
+      button-level01_2: 1753337391
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,28 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class OptionsMenu : MonoBehaviour
 {
-    public SettingsSO settings;
-    public Toggle RotationInverstion;
+    public Toggle invertYToggle;
+    private bool isInverted;
 
     private void Start()
     {
-        RotationInverstion.onValueChanged.AddListener(RotationDirection);
+        if (PlayerPrefs.HasKey("isInverted"))
+        {
+            isInverted = PlayerPrefs.GetInt("isInverted") == 1;
+            invertYToggle.isOn = isInverted;
+        }
+        else
+        {
+            isInverted = false;
+            invertYToggle.isOn = false;
+        }
     }
 
-    private void RotationDirection(bool state)
+    /// <summary>
+    /// Apply the changes made in the options menu and return to the previous scene.
+    /// </summary>
+    public void Apply()
     {
-        settings.isInverted = state;
-        RotationInverstion.isOn = state;
+        isInverted = invertYToggle.isOn;
+        PlayerPrefs.SetInt("isInverted", isInverted ? 1 : 0);
+        PlayerPrefs.Save();
+        ReturnToPreviousScene();
     }
 
-    [System.Obsolete]
+    /// <summary>
+    /// Discard changes and return to the previous scene.
+    /// </summary>
     public void Back()
     {
-        SceneManager.LoadScene(settings.PreviousScene);
+        ReturnToPreviousScene();
+    }
+
+    /// <summary>
+    /// Helper method to load the previous scene.
+    /// </summary>
+    private void ReturnToPreviousScene()
+    {
+        Time.timeScale = 1f;
+        string previousScene = PlayerPrefs.GetString("PreviousScene", "MainMenu"); 
+        SceneManager.LoadScene(previousScene);
     }
 }

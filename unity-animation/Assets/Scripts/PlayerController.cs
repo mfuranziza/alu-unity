@@ -2,85 +2,114 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public float moveSpeed = 5f;
+    public float jumpForce = 25f;
+    public float fallThreshold = -10f;
     private Rigidbody rb;
-   // [SerializeField] private float JumpForce = 300f;
-   // [SerializeField] private float MovementSpeed = 20f;
-    [SerializeField] private Transform cameraPosition;
-    private Vector3 vertical;
-    private Vector3 horizontal;
-    private float directionX;
-    private float directionZ;
+    private float moveX;
+    private float moveZ;
     private Vector3 InitialPosition;
+    private bool isGrounded;
+    private Animator animator;
+    private float speed = 0.0f;
+    private bool isJumping = false;
+    private bool isFalling = false;
+    private bool isLanding = false;
+    private bool isGettingUp = false;
 
-
-   // public CharacterController controller;
     private void Awake()
     {
         InitialPosition = transform.position;
     }
 
-    private void Start()
+    void Start()
     {
-      //  rb = GetComponent<Rigidbody>();
-    //    controller = GetComponent<CharacterController>();
-
+        rb = GetComponent<Rigidbody>();
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
-       // Movements();
-       // Jumping();
-        CheckFalling();
-    }
+        Move();
+        Jump();
+        CheckFall();
 
-/// <summary>
-/// if player is falling get change the position to initial Position
-/// </summary>
-    void CheckFalling()
-    {
-        Vector3 spaceGap = new Vector3(0, 3, 0);
-        if (transform.position.y < -15f)
+        float moveInput = Input.GetAxis("Vertical");
+        speed = Mathf.Abs(moveInput);
+        animator.SetFloat("Speed", speed);
+
+        if (rb.velocity.y < 0 && !isGrounded)
         {
-            transform.position = InitialPosition +  spaceGap;
+            isFalling = true;
+            animator.SetBool("IsFalling", true);
+        }
+        else
+        {
+            isFalling = false;
+            animator.SetBool("IsFalling", false);
         }
     }
 
-    /*
-    
-/// <summary>
-/// player jumps when space is pressed
-/// </summary>
-    void Jumping()
+    void Move()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        moveX = Input.GetAxis("Horizontal");
+        moveZ = Input.GetAxis("Vertical");
+
+        Vector3 move = new Vector3(moveX, 0.0f, moveZ);
+        rb.velocity = new Vector3(move.x * moveSpeed, rb.velocity.y, move.z * moveSpeed);
+    }
+
+    void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(Vector3.up * JumpForce);    
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+            isJumping = true;
+            animator.SetBool("IsJumping", true);
         }
-       
     }
 
-/// <summary>
-/// hanles vertical and horizontal movements of player
-/// </summary>
-    void Movements()
+    void CheckFall()
     {
-        directionX = Input.GetAxisRaw("Horizontal");
-        directionZ = Input.GetAxisRaw("Vertical");
-
-        Vector3 forward = cameraPosition.forward;
-        Vector3 right = cameraPosition.right;
-
-        forward.y = 0;
-        right.y = 0;
-        forward.Normalize();
-        right.Normalize();
-
-        //controller.Move(new Vector3(directionX, 0, directionZ));
-
-        Vector3 movements = new Vector3(directionX, 0, directionZ);//* (Time.deltaTime * MovementSpeed);
-        //transform.position += movements;
-        rb.AddForce( movements * (Time.deltaTime * MovementSpeed));
+        if (transform.position.y < fallThreshold)
+        {
+            Respawn();
+        }
     }
-    */
+
+    private void Respawn()
+    {
+        transform.position = InitialPosition;
+        rb.velocity = Vector3.zero;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            isJumping = false;
+            isFalling = false;
+            isLanding = true;
+            isGettingUp = true; 
+            animator.SetBool("IsJumping", false);
+            animator.SetBool("IsFalling", false);
+            animator.SetBool("IsLanding", true);
+            animator.SetBool("IsGettingUp", true);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+            isLanding = false;
+            isGettingUp = false;
+            animator.SetBool("IsLanding", false);
+            animator.SetBool("IsGettingUp", false);
+        }
+    }
 }

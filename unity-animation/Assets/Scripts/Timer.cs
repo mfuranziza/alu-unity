@@ -1,52 +1,93 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-   public Text TimerText;
-   public SettingsSO settings;
+    public Text timerText;
+    public Text finalTimeText;
 
-   public bool isStarted = false;
-   public float seconds = 0f;
+    private float startTime;
+    private float elapsedTime;
+    private bool timerStarted;
+    private bool isPaused;
+    private float timeWhenPaused;
 
-   private void Update()
-   {
-      if (isStarted)
-      {
-         UpdateTimer();
-      }
-   }
+    private void Start()
+    {
+        timerStarted = false;
+        elapsedTime = 0f;
+        isPaused = false;
+    }
 
-   private void UpdateTimer()
-   {
-      seconds += Time.deltaTime;
-      int hours = (int)seconds / 60;
-      TimerText.text =  hours + ":" + seconds.ToString("00.00");
-   }
-
-   public void ChangeToGreen()
-   {
-      TimerText.color = Color.green;
-   }
-
-   private void OnTriggerEnter(Collider other)
-   {
-        if (settings.optionsActivated)
+    private void Update()
+    {
+        if (timerStarted && !isPaused)
         {
-            isStarted = false;
-           
-            int hours = (int)settings.CurrentTime / 60;
-            TimerText.text = hours + ":" + settings.CurrentTime.ToString("00.00");
+            elapsedTime = Time.time - startTime;
+            UpdateTimerText(elapsedTime);
         }
-        else
+    }
+
+    /// <summary>
+    /// Starts the timer.
+    /// </summary>
+    public void StartTimer()
+    {
+        if (!timerStarted)
         {
-            isStarted = true;
+            startTime = Time.time;
+            timerStarted = true;
         }
-    
-   }
+
+        if (isPaused)
+        {
+            startTime = Time.time - timeWhenPaused;
+            isPaused = false;
+        }
+    }
+
+    /// <summary>
+    /// Pauses the timer and stores the time when paused.
+    /// </summary>
+    public void PauseTimer()
+    {
+        if (timerStarted)
+        {
+
+            timeWhenPaused = elapsedTime;
+            isPaused = true;
+        }
+    }
+
+    /// <summary>
+    /// Stops the timer completely.
+    /// </summary>
+    public void StopTimer()
+    {
+        timerStarted = false;
+        isPaused = false;
+    }
+
+    /// <summary>
+    /// Updates the timer text based on the elapsed time.
+    /// </summary>
+    public void UpdateTimerText(float elapsedTime)
+    {
+        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+        int milliseconds = Mathf.FloorToInt((elapsedTime * 100f) % 100f);
+
+        timerText.text = string.Format("{0:00}:{1:00}.{2:00}", minutes, seconds, milliseconds);
+    }
+
+    /// <summary>
+    /// Display the final time on the WinCanvas.
+    /// </summary>
+    public void Win()
+    {
+        if (finalTimeText != null)
+        {
+            finalTimeText.text = timerText.text;
+        }
+    }
 }

@@ -1,33 +1,32 @@
-using StarterAssets;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CutsceneController : MonoBehaviour
 {
-    public GameObject TimerObject;
-    public GameObject PlayerObject;
-    public GameObject CutSceneCamera;
-    public float TimeToShow = 4f;
+    public GameObject mainCamera;
+    public GameObject player;
+    public GameObject timerCanvas;
 
-    private FirstPersonController FPC;
+    private Animator cutsceneAnimator;
+    private PlayerController playerController;
 
-    private void Start()
+    void Start()
     {
-        TimerObject.SetActive(false);
-        FPC = PlayerObject.GetComponentInChildren<FirstPersonController>();
-        FPC.enabled = false;
-        CutSceneCamera.SetActive(true);
-        StartCoroutine(FollowUp());
+        cutsceneAnimator = GetComponent<Animator>();
+        playerController = player.GetComponent<PlayerController>();
 
+        mainCamera.SetActive(false);
+        playerController.enabled = false;
+        timerCanvas.SetActive(false);
     }
-    
 
-    IEnumerator FollowUp()
+    void Update()
     {
-        yield return new WaitForSeconds(TimeToShow);
-        TimerObject.SetActive(true);
-        CutSceneCamera.SetActive(false);
-        FPC.enabled = true;
+        if (cutsceneAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f && !cutsceneAnimator.IsInTransition(0))
+        {
+            mainCamera.SetActive(true);
+            playerController.enabled = true;
+            timerCanvas.SetActive(true);
+            this.enabled = false;
+        }
     }
 }

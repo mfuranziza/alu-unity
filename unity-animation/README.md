@@ -1,2 +1,3 @@
-Unity Assets Management.
-![shortgameholberton](https://github.com/Ante-237/alu-unity/assets/77624934/2eb83773-5f12-4062-bdb2-6ac9c4fc8657)
+Unity - Assets: Models, Textures
+Skyboxes: Farland Skies - Cloudy Crown
+https://assetstore.unity.com/packages/2d/textures-materials/sky/farland-skies-cloudy-crown-60004

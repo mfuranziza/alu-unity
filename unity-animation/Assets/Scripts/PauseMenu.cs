@@ -1,82 +1,92 @@
-using StarterAssets;
-using System.Dynamic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles pausing and resuming the game and interacting with the timer.
+/// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    public Timer UITimer;
-    public GameObject PauseCanvas;
-    public SettingsSO settings;
-    public GameObject Player;
-    public StarterAssetsInputs starter;
-
-
+    public GameObject pauseMenuUI;
+    private bool isPaused = false;
+    private Timer timer;
 
     private void Start()
     {
-        if(settings.optionsActivated)
-        {
-            UITimer.seconds = settings.CurrentTime;
-            Player.transform.position = settings.PlayerPosition;
-            //settings.optionsActivated = false;
-            UITimer.isStarted = false;
-            PauseCanvas.SetActive(true);
-            Debug.Log("Options Activation Working");
-        }
+        timer = FindObjectOfType<Timer>();
     }
-
-
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Pause();
+            if (isPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
         }
-
-        
     }
 
+    /// <summary>
+    /// Pauses the game, activates the pause menu, and pauses the timer.
+    /// </summary>
     public void Pause()
     {
-        Cursor.lockState = CursorLockMode.None;
-        UITimer.isStarted = false;   
-        PauseCanvas.SetActive(true);
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0f;
+        isPaused = true;
+
+        if (timer != null)
+        {
+            timer.PauseTimer();
+        }
     }
 
+    /// <summary>
+    /// Resumes the game, hides the pause menu, and resumes the timer.
+    /// </summary>
     public void Resume()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        UITimer.isStarted = true;
-        PauseCanvas.SetActive(false);
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+        isPaused = false;
+
+        if (timer != null)
+        {
+            timer.StartTimer();
+        }
     }
 
+    /// <summary>
+    /// Restarts the current level by reloading the scene.
+    /// </summary>
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        UITimer.seconds = 0.0f;
-        settings.optionsActivated = false;
+        Time.timeScale = 1f;
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 
+    /// <summary>
+    /// Loads the Main Menu scene.
+    /// </summary>
     public void MainMenu()
     {
-        settings.optionsActivated = false;
-        SceneManager.LoadScene(4);
-
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
+    /// <summary>
+    /// Loads the Options scene.
+    /// </summary>
     public void Options()
     {
-        UITimer.isStarted = false;
-        settings.CurrentTime = UITimer.seconds;
-        settings.PlayerPosition = Player.transform.position;
-        settings.optionsActivated = true;
-        settings.PreviousScene = SceneManager.GetActiveScene().buildIndex;
-
-        UITimer.isStarted = false;
-        SceneManager.LoadScene(3);
-        PauseCanvas.SetActive(false);
+        PlayerPrefs.SetString("PreviousScene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.Save();
+        Time.timeScale = 0f;
+        SceneManager.LoadScene("Options");
     }
-
 }
